@@ -1,6 +1,6 @@
 {
   "name": "hipster-web-developer-starter-pack",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Pythonic web development never felt so good",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,7 @@
   "homepage": "",
   "devDependencies": {
     "autoprefixer": "^6.3.6",
+    "axis": "^0.6.1",
     "browser-sync": "^2.11.0",
     "gulp": "^3.9.1",
     "gulp-concat-css": "^2.2.0",

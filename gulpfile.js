@@ -67,9 +67,18 @@ gulp.task('browser_sync', function() {
     });
 });
 
+gulp.task('indexify', function() {
+    return gulp.src('build/index.pug')
+        .pipe( plumber({ errorHandler: handleErrors}) )
+        .pipe( pug() )
+        .pipe( gulp.dest('./public/'))
+        .pipe( notify("HTML compiled!") )
+        .pipe( reload({stream:true}) );
+})
+
 //compiles the jade template(s) to HTML
 gulp.task('compile_html', function() {
-    return gulp.src('build/styles/*.styl')
+    return gulp.src('build/views/*.pug')
         .pipe( plumber({ errorHandler: handleErrors }) )
         .pipe( pug() )
         .pipe( gulp.dest('./public/html'))
@@ -78,12 +87,13 @@ gulp.task('compile_html', function() {
 });
 
 //pug-watch needs compile_html to be a dependency for the reload to work when editing everything
-gulp.task('pug-watch', ['compile_html'], reload);
+gulp.task('pug-watch', ['compile_html', 'indexify'], reload);
 
 //watch, style and reload 
 gulp.task('watch', function() {
 
     //our the tasks used to compile styles, pug -> html and uglify JS  
+    gulp.watch('./build/index.pug', ['compile_html']);
     gulp.watch('./build/views/*.pug', ['compile_html']);
     gulp.watch('./build/styles/*.styl', ['styles']);
     gulp.watch('./build/js/*.js', ['minify']);
@@ -116,5 +126,5 @@ gulp.task('crush_imgs', function() {
 
 //default task runs on gulp - run styles, open up browsersync and watch our files
 //build_baby_build is only used when you deploy a project :D
-gulp.task('default', ['styles', 'minify','browser_sync', 'compile_html', 'watch'])
+gulp.task('default', ['styles', 'minify','browser_sync', 'compile_html', 'indexify', 'watch'])
 gulp.task('build_baby_build', ['styles', 'minify', 'crush_imgs', 'compile_html'])
