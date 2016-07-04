@@ -93,12 +93,13 @@ gulp.task('pug-watch', ['compile_html', 'indexify'], reload);
 gulp.task('watch', function() {
 
     //our the tasks used to compile styles, pug -> html and uglify JS  
-    gulp.watch('./build/index.pug', ['compile_html']);
+    gulp.watch('./build/index.pug', ['indexify']);
     gulp.watch('./build/views/*.pug', ['compile_html']);
     gulp.watch('./build/styles/*.styl', ['styles']);
     gulp.watch('./build/js/*.js', ['minify']);
 
     //reload when these files have compiled & changed
+    gulp.watch('./public/**/*.html', reload);
     gulp.watch('./public/*.html', reload);
     gulp.watch('./public/css/*.css', reload);
     gulp.watch('./public/scripts/*.js', reload);
