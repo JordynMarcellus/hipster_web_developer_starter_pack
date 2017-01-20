@@ -1,35 +1,32 @@
 //top-level gulp stuff
-var gulp = require('gulp');
-var notify = require('gulp-notify');
-var plumber = require('gulp-plumber')
+import gulp from 'gulp'
+import notify from 'gulp-notify'
+import plumber from 'gulp-plumber'
 
 //css processing
-var stylus = require('gulp-stylus');
-var rupture = require('rupture');
-var rucksack = require('gulp-rucksack');
-var cssnano = require('gulp-cssnano');
-var concatCSS = require('gulp-concat-css');
-var nib = require('nib');
+import stylus from 'gulp-stylus'
+import rupture from 'rupture'
+import rucksack from 'gulp-rucksack'
+import cssnano from 'gulp-cssnano'
+import concatCSS from 'gulp-concat-css'
+import axis from 'axis'
 
 //postCSS modules
-var postcss = require('gulp-postcss');
-var autoprefixer = require('autoprefixer');
-var lost = require('lost');
+import postcss from 'gulp-postcss' 
+import autoprefixer from 'autoprefixer'
+import lost from 'lost'
 
 //html processing
-var pug = require('gulp-pug');
+import pug from 'gulp-pug'
 
 //js processing
-var uglify = require('gulp-uglify');
+import uglify from 'gulp-uglify'
 
 //browser-sync
-var browser_sync = require('browser-sync');
-var reload = browser_sync.reload;
+import browserSync from 'browser-sync'
+const reload = browserSync.reload;
 
-//images
-var imagemin = require ('gulp-imagemin');
-
-//from a Wes Bos 
+//from a Wes Bos tutorial
 function handleErrors() {
     //arguments needs to be an array, so slicey-dicey.
     var args = Array.prototype.slice.call(arguments)
@@ -47,7 +44,7 @@ gulp.task('styles', function() {
     return gulp.src('build/styles/*.styl')
         .pipe(plumber({ errorHandler: handleErrors }))
         .pipe(stylus({
-             use: [nib(), rupture()]
+             use: [ axis(), rupture() ]
            }))
         .pipe( postcss([
             lost(),
@@ -61,8 +58,8 @@ gulp.task('styles', function() {
 });
 
 //do the browser_sync thing
-gulp.task('browser_sync', function() {
-    browser_sync({
+gulp.task('browserSync', function() {
+    browserSync({
         server: { baseDir: './public/'}
     });
 });
@@ -116,16 +113,6 @@ gulp.task('minify', function(){
         .pipe( reload({stream:true}) );
 });
 
-//compress those images
-gulp.task('crush_imgs', function() {
-    return gulp.src('build/assets/*')
-    .pipe(imagemin({
-            progressive: true,
-        }))
-    .pipe(gulp.dest('public/assets/'));
-});
-
 //default task runs on gulp - run styles, open up browsersync and watch our files
-//build_baby_build is only used when you deploy a project :D
-gulp.task('default', ['styles', 'minify','browser_sync', 'compile_html', 'indexify', 'watch'])
-gulp.task('build_baby_build', ['styles', 'minify', 'crush_imgs', 'compile_html'])
+gulp.task('default', ['styles', 'minify','browserSync', 'compile_html', 'indexify', 'watch'])
+
